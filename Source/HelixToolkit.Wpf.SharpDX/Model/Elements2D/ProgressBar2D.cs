@@ -580,17 +580,17 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             base.OnUpdate(context);
             if (backgroundChanged)
             {
-                (SceneNode as ProgressBarNode2D).Background = Background.ToD2DBrush(context.DeviceContext);
+                (SceneNode as ProgressBarNode2D).Background = Background.ToD2DBrush(SceneNode.RenderSize, context.DeviceContext);
                 backgroundChanged = false;
             }
             if (fillChanged)
             {
-                (SceneNode as ProgressBarNode2D).Fill = Fill.ToD2DBrush(context.DeviceContext);
+                (SceneNode as ProgressBarNode2D).Fill = Fill.ToD2DBrush(SceneNode.RenderSize, context.DeviceContext);
                 fillChanged = false;
             }
             if (strokeChanged)
             {
-                (SceneNode as ProgressBarNode2D).Stroke = Stroke.ToD2DBrush(context.DeviceContext);
+                (SceneNode as ProgressBarNode2D).Stroke = Stroke.ToD2DBrush(SceneNode.RenderSize, context.DeviceContext);
                 strokeChanged = false;
             }
             if (maximumChanged)

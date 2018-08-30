@@ -212,7 +212,7 @@ namespace HelixToolkit.Wpf.SharpDX.Extensions
             }
         }
 
-        public static D2D.Brush ToD2DBrush(this Media.Brush brush, global::SharpDX.Direct2D1.RenderTarget target)
+        public static D2D.Brush ToD2DBrush(this Media.Brush brush, global::SharpDX.Vector2 renderSize, global::SharpDX.Direct2D1.RenderTarget target)
         {
             if (brush == null)
                 return null;
@@ -221,10 +221,24 @@ namespace HelixToolkit.Wpf.SharpDX.Extensions
             {
                 return new global::SharpDX.Direct2D1.SolidColorBrush(target, solid.Color.ToColor4());
             }
-            else if(brush is Media.LinearGradientBrush linear)
+            else if (brush is Media.LinearGradientBrush linear)
             {
+                var brushProperties = new D2D.LinearGradientBrushProperties()
+                {
+                    StartPoint = linear.StartPoint.ToVector2(),
+                    EndPoint = linear.EndPoint.ToVector2()
+                };
+
+                if (linear.MappingMode == Media.BrushMappingMode.RelativeToBoundingBox)
+                {
+                    Point strtPoint = new Point(linear.StartPoint.X * renderSize.X, linear.StartPoint.Y * renderSize.Y);
+                    Point endPoint = new Point(linear.EndPoint.X * renderSize.X, linear.EndPoint.Y * renderSize.Y);
+                    brushProperties.StartPoint = strtPoint.ToVector2();
+                    brushProperties.EndPoint = endPoint.ToVector2();
+                }
+
                 return new D2D.LinearGradientBrush(target,
-                    new D2D.LinearGradientBrushProperties() { StartPoint = linear.StartPoint.ToVector2(), EndPoint = linear.EndPoint.ToVector2() },
+                    brushProperties,
                     new D2D.GradientStopCollection
                     (
                         target,
@@ -236,14 +250,28 @@ namespace HelixToolkit.Wpf.SharpDX.Extensions
             }
 #if NETFX_CORE
 #else
-            else if(brush is Media.RadialGradientBrush radial)
+            else if (brush is Media.RadialGradientBrush radial)
             {
+                var brushProperties = new D2D.RadialGradientBrushProperties()
+                {
+                    Center = radial.Center.ToVector2(),
+                    GradientOriginOffset = radial.GradientOrigin.ToVector2(),
+                    RadiusX = (float)radial.RadiusX,
+                    RadiusY = (float)radial.RadiusY
+                };
+
+                if (radial.MappingMode == Media.BrushMappingMode.RelativeToBoundingBox)
+                {
+                    Point center = new Point(radial.Center.X * renderSize.X, radial.Center.Y * renderSize.Y);
+                    Point gradientOriginOffset = new Point((radial.GradientOrigin.X -0.5) * renderSize.X, (radial.GradientOrigin.Y-0.5) * renderSize.Y);
+                    brushProperties.Center = center.ToVector2();
+                    brushProperties.GradientOriginOffset = gradientOriginOffset.ToVector2();
+                    brushProperties.RadiusX = (float)(renderSize.X * radial.RadiusX);
+                    brushProperties.RadiusY = (float)(renderSize.Y * radial.RadiusY);
+                }
+
                 return new D2D.RadialGradientBrush(target,
-                    new D2D.RadialGradientBrushProperties() {
-                        Center = radial.Center.ToVector2(),
-                        GradientOriginOffset = radial.GradientOrigin.ToVector2(),
-                        RadiusX = (float)radial.RadiusX, RadiusY = (float)radial.RadiusY
-                    },
+                    brushProperties,
                     new D2D.GradientStopCollection
                     (
                         target,

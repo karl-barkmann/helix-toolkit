@@ -228,7 +228,7 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             base.OnUpdate(context);
             if (strokeChanged)
             {
-                (SceneNode as BorderNode2D).BorderBrush = BorderBrush.ToD2DBrush(context.DeviceContext);
+                (SceneNode as BorderNode2D).BorderBrush = BorderBrush.ToD2DBrush(SceneNode.RenderSize, context.DeviceContext);
                 strokeChanged = false;
             }
         }

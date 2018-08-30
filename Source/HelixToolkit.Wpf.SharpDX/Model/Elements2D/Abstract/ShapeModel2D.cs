@@ -231,12 +231,12 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             base.OnUpdate(context);
             if (fillChanged)
             {
-                (SceneNode as ShapeNode2D).Fill = Fill.ToD2DBrush(context.DeviceContext);
+                (SceneNode as ShapeNode2D).Fill = Fill.ToD2DBrush(SceneNode.RenderSize, context.DeviceContext);
                 fillChanged = false;
             }
             if (strokeChanged)
             {
-                (SceneNode as ShapeNode2D).Stroke = Stroke.ToD2DBrush(context.DeviceContext);
+                (SceneNode as ShapeNode2D).Stroke = Stroke.ToD2DBrush(SceneNode.RenderSize, context.DeviceContext);
                 strokeChanged = false;
             }
         }

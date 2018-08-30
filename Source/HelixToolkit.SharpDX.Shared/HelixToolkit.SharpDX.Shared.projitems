@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\Models\LineSegment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\Models\PolyLineSegment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\Models\Segment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core2D\MultiSegmentRenderCore2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\PathRenderCore2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\ProgressBarRenderCore2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\RectangleRenderCore2D.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Lights\LightsBufferModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\OrderKey.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\DoubleUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\MultiSegmentNode2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\PathNode2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\ProgressBarNode2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Scene\Abstract\ParametricSurface3DNode.cs" />

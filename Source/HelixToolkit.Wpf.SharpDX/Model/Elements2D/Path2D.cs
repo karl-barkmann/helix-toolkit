@@ -120,7 +120,7 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             base.OnUpdate(context);
             if (_opacityMaskChanged)
             {
-                (SceneNode as PathNode2D).OpacityMask = OpacityMask.ToD2DBrush(context.DeviceContext);
+                (SceneNode as PathNode2D).OpacityMask = OpacityMask.ToD2DBrush(SceneNode.RenderSize, context.DeviceContext);
                 _opacityMaskChanged = false;
             }
         }

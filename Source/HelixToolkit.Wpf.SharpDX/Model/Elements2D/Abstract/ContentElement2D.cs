@@ -127,7 +127,7 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             base.OnUpdate(context);
             if (backgroundChanged)
             {
-                (SceneNode as ContentNode2D).Background = Background.ToD2DBrush(context.DeviceContext);
+                (SceneNode as ContentNode2D).Background = Background.ToD2DBrush(SceneNode.RenderSize, context.DeviceContext);
                 backgroundChanged = false;
             }
         }
