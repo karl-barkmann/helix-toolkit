@@ -149,6 +149,19 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             }
         }
 
+        private WordWrapping wordWrapping = WordWrapping.NoWrap;
+        public WordWrapping TextWrapping
+        {
+            set
+            {
+                SetAffectsRender(ref wordWrapping, value);
+            }
+            get
+            {
+                return wordWrapping;
+            }
+        }
+
         private Factory textFactory;
         private TextFormat textFormat;
 
@@ -186,7 +199,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
         {
             set
             {
-                if(Set(ref maxHeight, value))
+                if (Set(ref maxHeight, value))
                 {
                     textLayoutDirty = true;
                 }
@@ -224,12 +237,13 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
                 textLayout = Collect(new TextLayout(textFactory, Text, textFormat, MaxWidth, MaxHeight));
                 textLayoutDirty = false;
             }
-            textLayout.SetTextAlignment(TextAlignment);            
+            textLayout.SetTextAlignment(TextAlignment);
+            textLayout.SetWordWrapping(TextWrapping);
         }       
 
         protected override bool CanRender(RenderContext2D context)
         {
-            return base.CanRender(context) && Foreground != null;
+            return base.CanRender(context) && Foreground != null && MaxWidth > 0 && MaxHeight > 0;
         }
 
         protected override void OnRender(RenderContext2D context)

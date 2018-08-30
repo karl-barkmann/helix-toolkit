@@ -332,6 +332,21 @@ namespace HelixToolkit.Wpf.SharpDX.Extensions
             }
         }
 
+        public static global::SharpDX.DirectWrite.WordWrapping ToD2DWordWrapping(this TextWrapping wrapping)
+        {
+            switch (wrapping)
+            {
+                case TextWrapping.WrapWithOverflow:
+                    return global::SharpDX.DirectWrite.WordWrapping.EmergencyBreak;
+                case TextWrapping.NoWrap:
+                    return global::SharpDX.DirectWrite.WordWrapping.NoWrap;
+                case TextWrapping.Wrap:
+                    return global::SharpDX.DirectWrite.WordWrapping.Wrap;
+                default:
+                    return global::SharpDX.DirectWrite.WordWrapping.NoWrap;
+            }
+        }
+
         public static global::SharpDX.DirectWrite.FlowDirection ToD2DFlowDir(this FlowDirection direction)
         {
             switch (direction)

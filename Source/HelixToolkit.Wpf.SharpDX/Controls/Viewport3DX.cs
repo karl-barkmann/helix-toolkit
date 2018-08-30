@@ -218,6 +218,7 @@ namespace HelixToolkit.Wpf.SharpDX
         private Overlay Overlay2D { get; } = new Overlay() { EnableBitmapCache = true };
         private bool enableMouseButtonHitTest = true;
         private ContentPresenter hostPresenter;
+        private bool _isRenderingBeforeHide;
         /// <summary>
         /// Occurs when each render frame finished rendering. Called directly from RenderHost after each frame. 
         /// Use this event carefully. Unsubscrible this event when not used. Otherwise may cause performance issue.
@@ -245,7 +246,7 @@ namespace HelixToolkit.Wpf.SharpDX
             this.orthographicCamera.Reset();
 
             this.Camera = this.Orthographic ? this.orthographicCamera : this.perspectiveCamera;
-         
+
             InitCameraController();
             this.CommandBindings.Add(new CommandBinding(ViewportCommands.ZoomExtents, this.ZoomExtentsHandler));
             this.CommandBindings.Add(new CommandBinding(ViewportCommands.SetTarget, this.cameraController.setTargetHandler.Execute));
@@ -273,7 +274,15 @@ namespace HelixToolkit.Wpf.SharpDX
             {
                 if (renderHostInternal != null)
                 {
-                    renderHostInternal.IsRendering = (bool)e.NewValue;
+                    if (!(bool)e.NewValue)
+                    {
+                        _isRenderingBeforeHide = renderHostInternal.IsRendering;
+                        renderHostInternal.IsRendering = false;
+                    }
+                    else
+                    {
+                        renderHostInternal.IsRendering = _isRenderingBeforeHide;
+                    }
                 }
             };
             AddHandler(ViewBoxModel3D.ViewBoxClickedEvent, new EventHandler<ViewBoxModel3D.ViewBoxClickedEventArgs>(ViewCubeClicked));
@@ -855,6 +864,26 @@ namespace HelixToolkit.Wpf.SharpDX
         public void StopSpin()
         {
             cameraController.StopSpin();
+        }
+
+        /// <summary>
+        /// Start rendering。
+        /// </summary>
+        public void StartRenderding()
+        {
+            if (renderHostInternal == null)
+                return;
+            renderHostInternal.IsRendering = true;
+        }
+
+        /// <summary>
+        /// Stop rendering。
+        /// </summary>
+        public void StopRendering()
+        {
+            if (renderHostInternal == null)
+                return;
+            renderHostInternal.IsRendering = false;
         }
 
         /// <summary>

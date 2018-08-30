@@ -15,10 +15,13 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
 #endif
 {
     using Core2D;
+    using System;
 
     public class TextNode2D : SceneNode2D
     {
         private string text = "";
+        private float fontsize = 0f;
+
         public string Text
         {
             set
@@ -62,7 +65,10 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
         {
             set
             {
-                (RenderCore as TextRenderCore2D).FontSize = value;
+                if (SetAffectsMeasure(ref fontsize, value))
+                {
+                    (RenderCore as TextRenderCore2D).FontSize = value;
+                }
             }
             get
             {
@@ -74,7 +80,11 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
         {
             set
             {
-                (RenderCore as TextRenderCore2D).FontWeight = value;
+                var renderCore = RenderCore as TextRenderCore2D;
+                if (renderCore.FontWeight != value)
+                {
+                    renderCore.FontWeight = value;
+                }
             }
             get
             {
@@ -103,6 +113,18 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             get
             {
                 return (RenderCore as TextRenderCore2D).TextAlignment;
+            }
+        }
+
+        public WordWrapping TextWrapping
+        {
+            set
+            {
+                (RenderCore as TextRenderCore2D).TextWrapping = value;
+            }
+            get
+            {
+                return (RenderCore as TextRenderCore2D).TextWrapping;
             }
         }
 
@@ -157,7 +179,18 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             textRenderable.MaxWidth = availableSize.Width;
             textRenderable.MaxHeight = availableSize.Height;
             var metrices = textRenderable.Metrices;
-            return new Size2F(metrices.WidthIncludingTrailingWhitespace, metrices.Height);
+
+            var width = metrices.Width;
+            if (!float.IsInfinity(metrices.LayoutWidth) && !float.IsNaN(metrices.LayoutWidth))
+            {
+                width = Math.Max(metrices.Width, metrices.LayoutWidth);
+            }
+
+            if (metrices.LayoutWidth == 0)
+            {
+                width = 0;
+            }
+            return new Size2F(width, metrices.Height);
         }
 
         protected override RectangleF ArrangeOverride(RectangleF finalSize)

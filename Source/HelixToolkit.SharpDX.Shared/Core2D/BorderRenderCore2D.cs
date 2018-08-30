@@ -19,7 +19,13 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
     /// </summary>
     public class BorderRenderCore2D : RenderCore2DBase
     {
-        private readonly PathRenderCore2D[] borderRenderCore = new PathRenderCore2D[4] { new PathRenderCore2D(), new PathRenderCore2D(), new PathRenderCore2D(), new PathRenderCore2D() };
+        private readonly PathRenderCore2D[] borderRenderCore = new PathRenderCore2D[4]
+        {
+            new PathRenderCore2D(),
+            new PathRenderCore2D(),
+            new PathRenderCore2D(),
+            new PathRenderCore2D()
+        };
 
         private bool isBorderGeometryChanged = false;
 
@@ -35,7 +41,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             set
             {
                 var old = background;
-                if(SetAffectsRender(ref background, value))
+                if (SetAffectsRender(ref background, value))
                 {
                     RemoveAndDispose(ref old);
                     Collect(value);
@@ -56,11 +62,11 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             set
             {
                 var old = strokeBrush;
-                if(SetAffectsRender(ref strokeBrush, value))
+                if (SetAffectsRender(ref strokeBrush, value))
                 {
                     RemoveAndDispose(ref old);
                     Collect(value);
-                    foreach(var core in borderRenderCore)
+                    foreach (var core in borderRenderCore)
                     {
                         core.StrokeBrush = value;
                     }
@@ -97,7 +103,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             set
             {
                 var old = strokeStyle;
-                if(SetAffectsRender(ref strokeStyle, value))
+                if (SetAffectsRender(ref strokeStyle, value))
                 {
                     RemoveAndDispose(ref old);
                     Collect(value);
@@ -124,7 +130,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
         {
             set
             {
-                if(SetAffectsRender(ref cornerRadius, value))
+                if (SetAffectsRender(ref cornerRadius, value))
                 {
                     isBorderGeometryChanged = true;
                 }
@@ -137,7 +143,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             if (base.OnAttach(host))
             {
                 isBorderGeometryChanged = true;
-                foreach(var core in borderRenderCore)
+                foreach (var core in borderRenderCore)
                 {
                     core.Attach(host);
                 }
@@ -178,7 +184,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
 
             if (!borderThickness.IsZero && StrokeBrush != null && StrokeStyle != null)
             {
-                if(borderThickness.X == borderThickness.Y && borderThickness.X == borderThickness.Z && borderThickness.X == borderThickness.W)
+                if (borderThickness.X == borderThickness.Y && borderThickness.X == borderThickness.Z && borderThickness.X == borderThickness.W)
                 {
                     context.DeviceContext.DrawRoundedRectangle(roundRect, StrokeBrush, borderThickness.X, StrokeStyle);
                 }
@@ -186,7 +192,6 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
                 {
                     if (isBorderGeometryChanged)
                     {
-                    
                         var topLeft = LayoutBound.TopLeft + new Vector2(0, CornerRadius);
                         var topRight = LayoutBound.TopRight - new Vector2(CornerRadius, 0);
                         var bottomRight = LayoutBound.BottomRight - new Vector2(0, CornerRadius);
@@ -194,11 +199,11 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
 
                         if (borderThickness.X > 0)
                         {
-                            var figures = new List<Figure>();     
+                            var figures = new List<Figure>();
                             var figure = new Figure(topLeft, false, false);
                             if (CornerRadius > 0)
                             {
-                                figure.AddSegment(new ArcSegment(LayoutBound.TopLeft + new Vector2(CornerRadius, 0), new Size2F(CornerRadius, CornerRadius), 0, 
+                                figure.AddSegment(new ArcSegment(LayoutBound.TopLeft + new Vector2(CornerRadius, 0), new Size2F(CornerRadius, CornerRadius), 0,
                                     D2D.SweepDirection.Clockwise, D2D.ArcSize.Small));
                             }
                             figure.AddSegment(new LineSegment(topRight));
@@ -210,13 +215,13 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
                         {
                             borderRenderCore[0].Figures = null;
                         }
-                        if(borderThickness.Y > 0)
+                        if (borderThickness.Y > 0)
                         {
                             var figures = new List<Figure>();
                             var figure = new Figure(topRight, false, false);
-                            if(CornerRadius > 0)
+                            if (CornerRadius > 0)
                             {
-                                figure.AddSegment(new ArcSegment(LayoutBound.TopRight + new Vector2(0, CornerRadius) , new Size2F(CornerRadius, CornerRadius), 0,
+                                figure.AddSegment(new ArcSegment(LayoutBound.TopRight + new Vector2(0, CornerRadius), new Size2F(CornerRadius, CornerRadius), 0,
                                     D2D.SweepDirection.Clockwise, D2D.ArcSize.Small));
                             }
                             figure.AddSegment(new LineSegment(bottomRight));
@@ -266,7 +271,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
                         }
                         isBorderGeometryChanged = false;
                     }
-                    foreach(var core in borderRenderCore)
+                    foreach (var core in borderRenderCore)
                     {
                         core.Transform = this.Transform;
                         core.LocalTransform = this.LocalTransform;

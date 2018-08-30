@@ -31,6 +31,54 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
         Horizontal, Vertical
     }
 
+    public enum Stretch
+    {
+        /// <summary>
+        ///     None - Preserve original size
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        ///     Fill - Aspect ratio is not preserved, source rect fills destination rect.
+        /// </summary>
+        Fill = 1,
+
+        /// <summary>
+        ///     Uniform - Aspect ratio is preserved, Source rect is uniformly scaled as large as 
+        ///     possible such that both width and height fit within destination rect.  This will 
+        ///     not cause source clipping, but it may result in unfilled areas of the destination 
+        ///     rect, if the aspect ratio of source and destination are different.
+        /// </summary>
+        Uniform = 2,
+
+        /// <summary>
+        ///     UniformToFill - Aspect ratio is preserved, Source rect is uniformly scaled as small 
+        ///     as possible such that the entire destination rect is filled.  This can cause source 
+        ///     clipping, if the aspect ratio of source and destination are different.
+        /// </summary>
+        UniformToFill = 3,
+    }
+
+    public enum StretchDirection
+    {
+        /// <summary>
+        /// Only scales the content upwards when the content is smaller than the Viewbox.
+        /// If the content is larger, no scaling downwards is done.
+        /// </summary>
+        UpOnly,
+
+        /// <summary>
+        /// Only scales the content downwards when the content is larger than the Viewbox.
+        /// If the content is smaller, no scaling upwards is done.
+        /// </summary>
+        DownOnly,
+
+        /// <summary>
+        /// Always stretches to fit the Viewbox according to the stretch mode.
+        /// </summary>
+        Both
+    }
+
     public struct Thickness : IEquatable<Thickness>
     {
         public float Left;

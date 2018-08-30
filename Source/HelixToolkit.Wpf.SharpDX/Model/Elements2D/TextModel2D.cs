@@ -135,7 +135,6 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             }
         }
 
-
         /// <summary>
         /// Gets or sets the text alignment.
         /// </summary>
@@ -155,6 +154,27 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             DependencyProperty.Register("TextAlignment", typeof(TextAlignment), typeof(TextModel2D), new PropertyMetadata(TextAlignment.Left, (d,e)=> 
             {
                 ((d as Element2DCore).SceneNode as TextNode2D).TextAlignment = ((TextAlignment)e.NewValue).ToD2DTextAlignment();
+            }));
+
+        /// <summary>
+        /// Gets or sets the text alignment.
+        /// </summary>
+        /// <value>
+        /// The text alignment.
+        /// </value>
+        public TextWrapping TextWrapping
+        {
+            get { return (TextWrapping)GetValue(TextWrappingProperty); }
+            set { SetValue(TextWrappingProperty, value); }
+        }
+
+        /// <summary>
+        /// The text alignment property
+        /// </summary>
+        public static readonly DependencyProperty TextWrappingProperty =
+            DependencyProperty.Register("TextWrapping", typeof(TextWrapping), typeof(TextModel2D), new PropertyMetadata(TextWrapping.NoWrap, (d, e) =>
+            {
+                ((d as Element2DCore).SceneNode as TextNode2D).TextWrapping = ((TextWrapping)e.NewValue).ToD2DWordWrapping();
             }));
 
         /// <summary>
@@ -219,12 +239,12 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             base.OnUpdate(context);
             if (foregroundChanged)
             {
-                (SceneNode as TextNode2D).Foreground = Foreground != null ? Foreground.ToD2DBrush(context.DeviceContext) : null;
+                (SceneNode as TextNode2D).Foreground = Foreground?.ToD2DBrush(context.DeviceContext);
                 foregroundChanged = false;
             }
             if (backgroundChanged)
             {
-                (SceneNode as TextNode2D).Background = Background != null ? Background.ToD2DBrush(context.DeviceContext) : null;
+                (SceneNode as TextNode2D).Background = Background?.ToD2DBrush(context.DeviceContext);
                 backgroundChanged = false;
             }
         }
@@ -232,8 +252,8 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
         protected override void AssignDefaultValuesToSceneNode(SceneNode2D node)
         {
             var t = node as TextNode2D;
-            t.Text = Text == null ? "" : Text;
-            t.FontFamily = FontFamily == null ? DefaultFont : FontFamily;
+            t.Text = Text ?? "";
+            t.FontFamily = FontFamily ?? DefaultFont;
             t.FontWeight = FontWeight.ToDXFontWeight();
             t.FontStyle = FontStyle.ToDXFontStyle();
             t.FontSize = FontSize;

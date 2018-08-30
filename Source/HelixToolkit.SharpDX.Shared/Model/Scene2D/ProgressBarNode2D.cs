@@ -1,43 +1,55 @@
-﻿/*
-The MIT License (MIT)
-Copyright (c) 2018 Helix Toolkit contributors
-*/
-
-using SharpDX.Direct2D1;
+﻿using HelixToolkit.Wpf.SharpDX.Core2D;
+using D2D = SharpDX.Direct2D1;
+using SharpDX;
 using System;
 
-#if NETFX_CORE
-namespace HelixToolkit.UWP.Model.Scene2D
-#else
-
 namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
-#endif
 {
-    using Core2D;
-
-    public abstract class ShapeNode2D : SceneNode2D
+    class ProgressBarNode2D : SceneNode2D
     {
-        public Brush Fill
+        private bool strokeStyleChanged = true;
+
+        /// <summary>
+        /// Gets or sets the background.
+        /// </summary>
+        /// <value>
+        /// The background.
+        /// </value>
+        public D2D.Brush Background
         {
             set
             {
-                (RenderCore as ShapeRenderCore2DBase).FillBrush = value;
+                (RenderCore as ProgressBarRenderCore2D).Background = value;
             }
             get
             {
-                return (RenderCore as ShapeRenderCore2DBase).FillBrush;
+                return (RenderCore as ProgressBarRenderCore2D).Background;
             }
         }
 
-        public Brush Stroke
+        public D2D.Brush Fill
         {
-            set { (RenderCore as ShapeRenderCore2DBase).StrokeBrush = value; }
-            get { return (RenderCore as ShapeRenderCore2DBase).StrokeBrush; }
+            set
+            {
+                (RenderCore as ProgressBarRenderCore2D).FillBrush = value;
+            }
+            get
+            {
+                return (RenderCore as ProgressBarRenderCore2D).FillBrush;
+            }
         }
 
-        private CapStyle strokeDashCap = CapStyle.Flat;
+        public D2D.Brush Stroke
+        {
+            set { (RenderCore as ProgressBarRenderCore2D).StrokeBrush = value; }
+            get { return (RenderCore as ProgressBarRenderCore2D).StrokeBrush; }
+        }
 
-        public CapStyle StrokeDashCap
+        #region Stroke Style
+
+        private D2D.CapStyle strokeDashCap = D2D.CapStyle.Flat;
+
+        public D2D.CapStyle StrokeDashCap
         {
             set
             {
@@ -49,9 +61,9 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             get { return strokeDashCap; }
         }
 
-        private CapStyle strokeStartLineCap = CapStyle.Flat;
+        private D2D.CapStyle strokeStartLineCap = D2D.CapStyle.Flat;
 
-        public CapStyle StrokeStartLineCap
+        public D2D.CapStyle StrokeStartLineCap
         {
             set
             {
@@ -63,9 +75,9 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             get { return strokeStartLineCap; }
         }
 
-        private CapStyle strokeEndLineCap = CapStyle.Flat;
+        private D2D.CapStyle strokeEndLineCap = D2D.CapStyle.Flat;
 
-        public CapStyle StrokeEndLineCap
+        public D2D.CapStyle StrokeEndLineCap
         {
             set
             {
@@ -77,9 +89,9 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             get { return strokeEndLineCap; }
         }
 
-        private DashStyle strokeDashStyle = DashStyle.Solid;
+        private D2D.DashStyle strokeDashStyle = D2D.DashStyle.Solid;
 
-        public DashStyle StrokeDashStyle
+        public D2D.DashStyle StrokeDashStyle
         {
             set
             {
@@ -105,9 +117,9 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             get { return strokeDashOffset; }
         }
 
-        private LineJoin strokeLineJoin = LineJoin.Miter;
+        private D2D.LineJoin strokeLineJoin = D2D.LineJoin.Miter;
 
-        public LineJoin StrokeLineJoin
+        public D2D.LineJoin StrokeLineJoin
         {
             set
             {
@@ -140,11 +152,11 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
         {
             set
             {
-                (RenderCore as ShapeRenderCore2DBase).StrokeWidth = value;
+                (RenderCore as ProgressBarRenderCore2D).StrokeWidth = value;
             }
             get
             {
-                return (RenderCore as ShapeRenderCore2DBase).StrokeWidth;
+                return (RenderCore as ProgressBarRenderCore2D).StrokeWidth;
             }
         }
 
@@ -165,17 +177,66 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             }
         }
 
-        private bool strokeStyleChanged = true;
+        #endregion
 
-        protected ShapeRenderCore2DBase shapeRenderable;
+        public double Maximum
+        {
+            set
+            {
+                (RenderCore as ProgressBarRenderCore2D).Maximum = value;
+            }
+            get
+            {
+                return (RenderCore as ProgressBarRenderCore2D).Maximum;
+            }
+        }
+
+        public double Minimum
+        {
+            set
+            {
+                (RenderCore as ProgressBarRenderCore2D).Minimum = value;
+            }
+            get
+            {
+                return (RenderCore as ProgressBarRenderCore2D).Minimum;
+            }
+        }
+
+        public double Value
+        {
+            set
+            {
+                (RenderCore as ProgressBarRenderCore2D).Value = value;
+            }
+            get
+            {
+                return (RenderCore as ProgressBarRenderCore2D).Value;
+            }
+        }
+
+        public Orientation Orientation
+        {
+            get
+            {
+                return (RenderCore as ProgressBarRenderCore2D).Orientation;
+            }
+            set
+            {
+                (RenderCore as ProgressBarRenderCore2D).Orientation = value;
+            }
+        }
+
+        protected override bool OnHitTest(ref Vector2 mousePoint, out HitTest2DResult hitResult)
+        {
+            hitResult = null;
+            return false;
+        }
 
         protected override RenderCore2D CreateRenderCore()
         {
-            shapeRenderable = CreateShapeRenderCore();
-            return shapeRenderable;
+            return new ProgressBarRenderCore2D();
         }
-
-        protected abstract ShapeRenderCore2DBase CreateShapeRenderCore();
 
         protected override bool OnAttach(IRenderHost host)
         {
@@ -195,8 +256,9 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             base.Update(context);
             if (strokeStyleChanged)
             {
-                shapeRenderable.StrokeStyle = new StrokeStyle(context.DeviceContext.Factory,
-                    new StrokeStyleProperties()
+                var renderCore = RenderCore as ProgressBarRenderCore2D;
+                renderCore.StrokeStyle = new D2D.StrokeStyle(context.DeviceContext.Factory,
+                    new D2D.StrokeStyleProperties()
                     {
                         DashCap = this.StrokeDashCap,
                         StartCap = StrokeStartLineCap,

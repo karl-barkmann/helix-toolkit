@@ -7,10 +7,11 @@ Copyright (c) 2018 Helix Toolkit contributors
 namespace HelixToolkit.UWP.Model.Scene2D
 #else
 
+using HelixToolkit.Wpf.SharpDX.Elements2D;
+
 namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
 #endif
 {
-    using Elements2D;
     public partial class SceneNode2D
     {
         public static implicit operator Element2D(SceneNode2D s)

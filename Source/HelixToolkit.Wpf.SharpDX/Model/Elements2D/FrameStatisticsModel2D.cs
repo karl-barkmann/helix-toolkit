@@ -67,12 +67,12 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             base.OnUpdate(context);
             if (foregroundChanged)
             {
-                (SceneNode as FrameStatisticsNode2D).Foreground = Foreground != null ? Foreground.ToD2DBrush(context.DeviceContext) : null;
+                (SceneNode as FrameStatisticsNode2D).Foreground = Foreground?.ToD2DBrush(context.DeviceContext);
                 foregroundChanged = false;
             }
             if (backgroundChanged)
             {
-                (SceneNode as FrameStatisticsNode2D).Background = Background != null ? Background.ToD2DBrush(context.DeviceContext) : null;
+                (SceneNode as FrameStatisticsNode2D).Background = Background?.ToD2DBrush(context.DeviceContext);
                 backgroundChanged = false;
             }
         }

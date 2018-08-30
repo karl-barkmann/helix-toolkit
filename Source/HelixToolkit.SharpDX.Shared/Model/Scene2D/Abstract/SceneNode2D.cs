@@ -165,6 +165,7 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
                 if (Set(ref modelMatrix, value))
                 {
                     RenderCore.LocalTransform = value;
+                    InvalidateTransform();
                     InvalidateVisual();
                 }
             }
@@ -412,6 +413,8 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
                 RelativeMatrix = Matrix3x2.Translation(-RenderSize * RenderTransformOrigin)
                     * ModelMatrix * Matrix3x2.Translation(RenderSize * RenderTransformOrigin)
                     * LayoutTranslate;
+
+                //RelativeMatrix = ModelMatrix;
                 TotalModelMatrix = RelativeMatrix * ParentMatrix;
                 IsTransformDirty = false;
                 InvalidateVisual();

@@ -21,8 +21,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\Models\BezierSegment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\Models\Figure.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\Models\LineSegment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core2D\Models\PolyLineSegment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\Models\Segment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\PathRenderCore2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core2D\ProgressBarRenderCore2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\RectangleRenderCore2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Abstract\GeometryRenderCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Abstract\RenderCore.cs" />
@@ -147,6 +149,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Lights\Light3DSceneShared.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Lights\LightsBufferModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\OrderKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\DoubleUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\PathNode2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\ProgressBarNode2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Scene\Abstract\ParametricSurface3DNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Scene\BatchedMeshNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Scene\BoneGroupNode.cs" />

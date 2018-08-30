@@ -4,6 +4,7 @@ using Media = Windows.UI;
 using Media = System.Windows.Media;
 using System.Windows.Media.Media3D;
 using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 #endif
 using global::SharpDX;
 using System.Runtime.CompilerServices;
@@ -196,6 +197,11 @@ namespace HelixToolkit.Wpf.SharpDX
         public static Vector2 ToVector2(this Point vector)
         {
             return new Vector2((float)vector.X, (float)vector.Y);
+        }
+
+        public static Size2F ToSize2F(this Size size)
+        {
+            return new Size2F((float)size.Width, (float)size.Height);
         }
 #endif
 

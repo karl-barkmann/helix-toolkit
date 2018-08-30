@@ -38,7 +38,7 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
                 }
                 else
                 {
-                    return new TextModel2D() { Text = e.ToString() };
+                    return new TextModel2D() { Text = e?.ToString() };
                 }
             }));
 

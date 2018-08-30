@@ -18,10 +18,14 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
 #endif
 {
     using Core2D;
+    using System.Windows;
+    using System.Windows.Controls;
 
     public class ImageNode2D : SceneNode2D
     {
         private Stream imageStream;
+        private Stretch _stretch = Stretch.Uniform;
+        private StretchDirection _stretchDirection = StretchDirection.Both;
 
         public Stream ImageStream
         {
@@ -29,12 +33,40 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             {
                 if (SetAffectsMeasure(ref imageStream, value))
                 {
-                    bitmapChanged = true;
+                    BitmapChanged = true;
                 }
             }
             get
             {
                 return imageStream;
+            }
+        }
+
+        public Stretch Stretch
+        {
+            get { return _stretch; }
+            set
+            {
+                if (_stretch != value)
+                {
+                    _stretch = value;
+                    InvalidateMeasure();
+                    InvalidateArrange();
+                }
+            }
+        }
+
+        public StretchDirection StretchDirection
+        {
+            get { return _stretchDirection; }
+            set
+            {
+                if (_stretchDirection != value)
+                {
+                    _stretchDirection = value;
+                    InvalidateMeasure();
+                    InvalidateArrange();
+                }
             }
         }
 
@@ -50,7 +82,7 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             }
         }
 
-        protected bool bitmapChanged { private set; get; } = true;
+        protected bool BitmapChanged { private set; get; } = true;
 
         protected override RenderCore2D CreateRenderCore()
         {
@@ -61,7 +93,7 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
         {
             if (base.OnAttach(host))
             {
-                bitmapChanged = true;
+                BitmapChanged = true;
                 return true;
             }
             else
@@ -94,42 +126,28 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
         public override void Update(RenderContext2D context)
         {
             base.Update(context);
-            if (bitmapChanged)
+            if (BitmapChanged)
             {
                 LoadBitmap(context, ImageStream);
-                bitmapChanged = false;
+                InvalidateMeasure();
+                InvalidateArrange();
+                BitmapChanged = false;
             }
         }
 
         protected override Size2F MeasureOverride(Size2F availableSize)
         {
-            if (ImageStream != null)
-            {
-                var imageSize = (RenderCore as ImageRenderCore2D).ImageSize;
-                if (Width == 0 && Height == 0)
-                {
-                    return new Size2F(Math.Min(availableSize.Width, imageSize.Width), Math.Min(availableSize.Height, imageSize.Height));
-                }
-                else if (imageSize.Width == 0 || imageSize.Height == 0)
-                {
-                    return availableSize;
-                }
-                else
-                {
-                    float aspectRatio = imageSize.Width / imageSize.Height;
-                    if (Width == 0)
-                    {
-                        var height = Math.Min(availableSize.Height, Height);
-                        return new Size2F(height / aspectRatio, height);
-                    }
-                    else
-                    {
-                        var width = Math.Min(availableSize.Width, Width);
-                        return new Size2F(width, width * aspectRatio);
-                    }
-                }
-            }
-            return new Size2F(Math.Max(0, Width), Math.Max(0, Height));
+            var inputSize = new Size(availableSize.Width, availableSize.Height);
+            return MeasureArrangeHelper(inputSize).ToSize2F();
+        }
+
+        protected override RectangleF ArrangeOverride(RectangleF finalSize)
+        {
+            var inputSize = new Size(finalSize.Width, finalSize.Height);
+            var arrangeSize = MeasureArrangeHelper(inputSize).ToSize2F();
+            finalSize.Width = arrangeSize.Width;
+            finalSize.Height = arrangeSize.Height;
+            return finalSize;
         }
 
         protected override bool OnHitTest(ref Vector2 mousePoint, out HitTest2DResult hitResult)
@@ -144,6 +162,95 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             {
                 return false;
             }
+        }
+
+        private Size MeasureArrangeHelper(Size inputSize)
+        {
+            var renderCore = RenderCore as ImageRenderCore2D;
+            Size naturalSize = new Size(Width,Height);
+            if (renderCore.Bitmap == null)
+            {
+                return naturalSize;
+            }
+
+            naturalSize = new Size(renderCore.ImageSize.Width, renderCore.ImageSize.Height);
+
+            //get computed scale factor
+            Size scaleFactor = ComputeScaleFactor(inputSize,
+                                                          naturalSize,
+                                                          this.Stretch,
+                                                          this.StretchDirection);
+
+            // Returns our minimum size & sets DesiredSize.
+            return new Size(naturalSize.Width * scaleFactor.Width, naturalSize.Height * scaleFactor.Height);
+        }
+
+        internal static Size ComputeScaleFactor(Size availableSize,
+                                               Size contentSize,
+                                               Stretch stretch,
+                                               StretchDirection stretchDirection)
+        {
+            // Compute scaling factors to use for axes
+            double scaleX = 1.0;
+            double scaleY = 1.0;
+
+            bool isConstrainedWidth = !Double.IsPositiveInfinity(availableSize.Width);
+            bool isConstrainedHeight = !Double.IsPositiveInfinity(availableSize.Height);
+
+            if ((stretch == Stretch.Uniform || stretch == Stretch.UniformToFill || stretch == Stretch.Fill)
+                 && (isConstrainedWidth || isConstrainedHeight))
+            {
+                // Compute scaling factors for both axes
+                scaleX = (DoubleUtil.IsZero(contentSize.Width)) ? 0.0 : availableSize.Width / contentSize.Width;
+                scaleY = (DoubleUtil.IsZero(contentSize.Height)) ? 0.0 : availableSize.Height / contentSize.Height;
+
+                if (!isConstrainedWidth) scaleX = scaleY;
+                else if (!isConstrainedHeight) scaleY = scaleX;
+                else
+                {
+                    // If not preserving aspect ratio, then just apply transform to fit
+                    switch (stretch)
+                    {
+                        case Stretch.Uniform:       //Find minimum scale that we use for both axes
+                            double minscale = scaleX < scaleY ? scaleX : scaleY;
+                            scaleX = scaleY = minscale;
+                            break;
+
+                        case Stretch.UniformToFill: //Find maximum scale that we use for both axes
+                            double maxscale = scaleX > scaleY ? scaleX : scaleY;
+                            scaleX = scaleY = maxscale;
+                            break;
+
+                        case Stretch.Fill:          //We already computed the fill scale factors above, so just use them
+                            break;
+                    }
+                }
+
+                //Apply stretch direction by bounding scales.
+                //In the uniform case, scaleX=scaleY, so this sort of clamping will maintain aspect ratio
+                //In the uniform fill case, we have the same result too.
+                //In the fill case, note that we change aspect ratio, but that is okay
+                switch (stretchDirection)
+                {
+                    case StretchDirection.UpOnly:
+                        if (scaleX < 1.0) scaleX = 1.0;
+                        if (scaleY < 1.0) scaleY = 1.0;
+                        break;
+
+                    case StretchDirection.DownOnly:
+                        if (scaleX > 1.0) scaleX = 1.0;
+                        if (scaleY > 1.0) scaleY = 1.0;
+                        break;
+
+                    case StretchDirection.Both:
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            //Return this as a size now
+            return new Size(scaleX, scaleY);
         }
     }
 }

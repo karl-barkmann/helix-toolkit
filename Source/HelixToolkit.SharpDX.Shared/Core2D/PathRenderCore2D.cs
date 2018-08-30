@@ -3,7 +3,6 @@ The MIT License (MIT)
 Copyright (c) 2018 Helix Toolkit contributors
 */
 //#define DEBUGBOUNDS
-using SharpDX;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using D2D = global::SharpDX.Direct2D1;
@@ -68,6 +67,31 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             }
             get { return fillMode; }
         }
+
+        private D2D.Brush _opacityMask = null;
+        /// <summary>
+        /// Gets or sets the opacity mask brush.
+        /// </summary>
+        /// <value>
+        /// The fill brush.
+        /// </value>
+        public D2D.Brush OpacityMask
+        {
+            set
+            {
+                var old = _opacityMask;
+                if (SetAffectsRender(ref _opacityMask, value))
+                {
+                    RemoveAndDispose(ref old);
+                    Collect(value);
+                }
+            }
+            get
+            {
+                return _opacityMask;
+            }
+        }
+
         /// <summary>
         /// Called when [attach].
         /// </summary>
@@ -89,7 +113,8 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             if (isGeometryChanged)
             {               
                 RemoveAndDispose(ref geometry);
-                if(Figures == null || Figures.Count == 0)
+
+                if (Figures == null || Figures.Count == 0)
                 {
                     return;
                 }
@@ -109,6 +134,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             {
                 context.DeviceContext.DrawGeometry(geometry, StrokeBrush, StrokeWidth, StrokeStyle);
             }
+
             if(FillBrush != null)
             {
                 context.DeviceContext.FillGeometry(geometry, FillBrush);

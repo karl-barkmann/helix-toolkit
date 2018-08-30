@@ -144,12 +144,14 @@
     <Compile Include="Controls\Viewport3DX.Properties.cs" />
     <Compile Include="Controls\ViewportExtensions.cs" />
     <Compile Include="Controls\ViewportCommands.cs" />
+    <Compile Include="Extensions\GeometryExtensions.cs" />
     <Compile Include="Extensions\Matrix3DExtensions.cs" />
     <Compile Include="Extensions\TypeConvertExtensions.cs" />
     <Compile Include="Model\Elements2D\Abstract\Clickable2D.cs" />
     <Compile Include="Model\Elements2D\Abstract\ContentElement2D.cs" />
     <Compile Include="Model\Elements2D\FrameStatisticsModel2D.cs" />
     <Compile Include="Model\Elements2D\ImageModel2D.cs" />
+    <Compile Include="Model\Elements2D\ItemsModel2D.cs" />
     <Compile Include="Model\Elements2D\Panel2D.cs" />
     <Compile Include="Model\Elements2D\Abstract\ShapeModel2D.cs" />
     <Compile Include="Model\Elements2D\Border2D.cs" />
@@ -158,6 +160,8 @@
     <Compile Include="Model\Elements2D\EllipseModel2D.cs" />
     <Compile Include="Model\Elements2D\Interfaces.cs" />
     <Compile Include="Model\Elements2D\Overlay.cs" />
+    <Compile Include="Model\Elements2D\Path2D.cs" />
+    <Compile Include="Model\Elements2D\ProgressBar2D.cs" />
     <Compile Include="Model\Elements2D\RectangleModel2D.cs" />
     <Compile Include="Model\Elements2D\RelativePositionCanvas2D.cs" />
     <Compile Include="Model\Elements2D\StackPanel2D.cs" />

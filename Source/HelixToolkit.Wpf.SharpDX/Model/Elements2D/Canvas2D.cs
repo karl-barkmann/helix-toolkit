@@ -129,6 +129,7 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
                 foreach (var child in Items)
                 {
                     child.Measure(childConstraint);
+                    var desiredSize = child.DesiredSize;
                 }
                 return new Size2F();
             }
@@ -174,7 +175,6 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
                             }
                         }
                         c.Arrange(new RectangleF(xPos, yPos, desired.X, desired.Y));
-                        //c.Arrange(new RectangleF(xPos, yPos, desired.X + xPos, desired.Y + yPos));
                     }
                 }
                 return finalSize;
