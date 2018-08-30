@@ -214,7 +214,10 @@ namespace HelixToolkit.Wpf.SharpDX.Extensions
 
         public static D2D.Brush ToD2DBrush(this Media.Brush brush, global::SharpDX.Direct2D1.RenderTarget target)
         {
-            if(brush is Media.SolidColorBrush solid)
+            if (brush == null)
+                return null;
+
+            if (brush is Media.SolidColorBrush solid)
             {
                 return new global::SharpDX.Direct2D1.SolidColorBrush(target, solid.Color.ToColor4());
             }
