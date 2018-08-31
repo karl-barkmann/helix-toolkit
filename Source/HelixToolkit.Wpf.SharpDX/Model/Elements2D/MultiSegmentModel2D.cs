@@ -38,6 +38,7 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
         public MultiSegmentModel2D()
         {
             Transform = new RotateTransform {Angle = 0d};
+            this.RenderTransformOrigin=new Point(0.5,0.5);
             _storyboard = new Storyboard {RepeatBehavior = RepeatBehavior.Forever};
             Timeline.SetDesiredFrameRate(_storyboard, 30);
             var animation = CreateDoubleAnimation();

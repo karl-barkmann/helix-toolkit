@@ -69,16 +69,10 @@
                                 StrokeThickness="1" />
                         </hx2D:StackPanel2D>                        
                     </hx2D:StackPanel2D>
-
-                    <hx2D:EllipseModel2D
-                        Width="50"
-                        Height="20"
-                        Fill="Green"
-                        Stroke="Red"
-                        StrokeThickness="2" />
-                    
-                    <hx2D:MultiSegmentModel2D Width="300" Height="200"
-                                              Stroke="Red" StrokeThickness="20"
+                   
+                    <hx2D:MultiSegmentModel2D EnableAnimation="True"
+                                              Width="300" Height="200"
+                                              Stroke="Red" StrokeThickness="40"
                                               SegmentAngle="20" SegmentNum="10"/>
                    
                 </hx2D:Panel2D>
