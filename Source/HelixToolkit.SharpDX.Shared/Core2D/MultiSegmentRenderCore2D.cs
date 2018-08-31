@@ -53,14 +53,25 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
         }
 
 
+        private double GetRadius()
+        {
+            var radius = LayoutBound.Width / 2d;
+            if (LayoutBound.Height < LayoutBound.Width)
+            {
+                radius = LayoutBound.Height / 2d;
+            }
+            radius = radius - StrokeWidth;
+            return radius;
+        }
+
         protected override void OnRender(RenderContext2D context)
         {
             //VBI5中的多线段的半径使用的是控件的宽度
-            var radius = LayoutBound.Width / 2f;
+            var radius = GetRadius();
             var size2F = new Size2F((float) radius, (float) radius);
             double startAngle = 90d - segmentAngle / 2.0d;
 
-            double rangle = 0;
+            //double rangle = 0;
             double interval = (360d - (segmentAngle * segmentNum)) / (double) segmentNum;
             var figures = new List<Figure>();
             for (int i = 0; i < segmentNum; i++)
@@ -116,15 +127,17 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
 
         internal Vector2 GetArcPoint(double degree, double radius)
         {
-            Vector2 arcPoint = CalArcPoint(degree);
-            return RelativeToAbsolutePoint(arcPoint);
+            Vector2 arcPoint = ComputeCartesianCoordinate(degree, radius);
+            return arcPoint;
+            //CalArcPoint(degree);
+            //return RelativeToAbsolutePoint(arcPoint);
         }
 
 
         private static Vector2 ComputeCartesianCoordinate(double angle, double radius)
         {
             // convert to radians
-            double angleRad = (Math.PI / 180.0) * (angle - 90);
+            double angleRad = (Math.PI / 180.0) * angle;
             double x = radius * Math.Cos(angleRad);
             double y = radius * Math.Sin(angleRad);
             return new Vector2((float) x, (float) y);

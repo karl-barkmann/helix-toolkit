@@ -20,10 +20,10 @@
             <hx:DirectionalLight3D Direction="{Binding VM3D.Light1Direction}" Color="{Binding VM3D.Light1Color}" />
             <hx:DirectionalLight3D Direction="{Binding VM3D.Light2Direction}" Color="{Binding VM3D.Light2Color}" />
             <hx:DirectionalLight3D Direction="{Binding VM3D.Light3Direction}" Color="{Binding VM3D.Light3Color}" />
-            <hx:MeshGeometryModel3D
+            <!--<hx:MeshGeometryModel3D
                 CullMode="Back"
                 Geometry="{Binding VM3D.Model}"
-                Material="{Binding VM3D.ModelMaterial}" />
+                Material="{Binding VM3D.ModelMaterial}" />-->
             <hx:Viewport3DX.Content2D>
                 <hx2D:Panel2D>
                     <hx2D:StackPanel2D Orientation="Vertical">
@@ -70,17 +70,17 @@
                         </hx2D:StackPanel2D>                        
                     </hx2D:StackPanel2D>
 
-
-
                     <hx2D:EllipseModel2D
                         Width="50"
                         Height="20"
                         Fill="Green"
                         Stroke="Red"
                         StrokeThickness="2" />
-                    <hx2D:ImageModel2D VerticalAlignment="Center" HorizontalAlignment="Center"
-                                       Width="100" Height="100"
-                                       ImageStream="{Binding VM2D.ImageStream}"/>
+                    
+                    <hx2D:MultiSegmentModel2D Width="300" Height="200"
+                                              Stroke="Red" StrokeThickness="20"
+                                              SegmentAngle="20" SegmentNum="10"/>
+                   
                 </hx2D:Panel2D>
             </hx:Viewport3DX.Content2D>
         </hx:Viewport3DX>
