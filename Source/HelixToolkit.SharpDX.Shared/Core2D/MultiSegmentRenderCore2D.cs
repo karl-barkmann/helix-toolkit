@@ -16,38 +16,45 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
 {
     public class MultiSegmentRenderCore2D : ShapeRenderCore2DBase
     {
-        private float _length;
-
-
         private double segmentAngle;
-
-
         private int segmentNum;
+        private D2D.PathGeometry1 _geometry;
+        private bool _isGeometryChanged;
 
         public int SegmentNum
         {
             get => segmentNum;
-            set => SetAffectsRender(ref segmentNum, value);
+            set
+            {
+                if (SetAffectsRender(ref segmentNum, value))
+                {
+                    _isGeometryChanged = true;
+                }
+            }
         }
 
         public double SegmentAngle
         {
             get => segmentAngle;
-            set => SetAffectsRender(ref segmentAngle, value);
+            set
+            {
+                if (SetAffectsRender(ref segmentAngle, value))
+                {
+                    _isGeometryChanged = true;
+                }
+            }
         }
 
         protected override bool OnAttach(IRenderHost host)
         {
-            if (base.OnAttach(host))
-                return true;
-            return false;
+            _isGeometryChanged = true;
+            return base.OnAttach(host);
         }
 
         protected override bool CanRender(RenderContext2D context)
         {
-            return base.CanRender(context);
+            return base.CanRender(context) && SegmentNum > 0;
         }
-
 
         private float GetRadius()
         {
@@ -60,42 +67,47 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
 
         protected override void OnRender(RenderContext2D context)
         {
-            //VBI5中的多线段的半径使用的是控件的宽度
-            var radius = GetRadius();
-            _length = radius * 2f;
-            var size2F = new Size2F(radius, radius);
-            var startAngle = 90d - segmentAngle / 2.0d;
-
-            var interval = (360d - segmentAngle * segmentNum) / segmentNum;
-            var figures = new List<Figure>();
-            for (var i = 0; i < segmentNum; i++)
+            if (_isGeometryChanged)
             {
-                var startPoint = GetArcPoint(startAngle, radius);
-                var figure = new Figure(startPoint, false, false);
-                var endAngle = segmentAngle + startAngle;
-                var endPoint = GetArcPoint(endAngle, radius);
-                var arcSize = D2D.ArcSize.Small;
-                if (segmentAngle > 180d)
-                    arcSize = D2D.ArcSize.Large;
-                var arcSegment =
-                    new ArcSegment(endPoint, size2F, 0, D2D.SweepDirection.Clockwise, arcSize);
-                figure.AddSegment(arcSegment);
-                figures.Add(figure);
-                startAngle = endAngle + interval;
+                RemoveAndDispose(ref _geometry);
+
+                var radius = GetRadius();
+                var size2F = new Size2F(radius, radius);
+                var startAngle = 90d - segmentAngle / 2.0d;
+
+                var interval = (360d - segmentAngle * segmentNum) / segmentNum;
+                var figures = new List<Figure>();
+                for (var i = 0; i < segmentNum; i++)
+                {
+                    var startPoint = GetArcPoint(startAngle, radius);
+                    var figure = new Figure(startPoint, false, false);
+                    var endAngle = segmentAngle + startAngle;
+                    var endPoint = GetArcPoint(endAngle, radius);
+                    var arcSize = D2D.ArcSize.Small;
+                    if (segmentAngle > 180d)
+                        arcSize = D2D.ArcSize.Large;
+                    var arcSegment =
+                        new ArcSegment(endPoint, size2F, 0, D2D.SweepDirection.Clockwise, arcSize);
+                    figure.AddSegment(arcSegment);
+                    figures.Add(figure);
+                    startAngle = endAngle + interval;
+                }
+
+                _geometry = Collect(new D2D.PathGeometry1(context.DeviceResources.Factory2D));
+                using (var sink = _geometry.Open())
+                {
+                    foreach (var figure in figures)
+                        figure.Create(sink);
+
+                    sink.Close();
+                }
+                _isGeometryChanged = false;
             }
 
-            var geometry = Collect(new D2D.PathGeometry1(context.DeviceResources.Factory2D));
-            using (var sink = geometry.Open())
-            {
-                foreach (var figure in figures)
-                    figure.Create(sink);
-
-                sink.Close();
-            }
             if (StrokeBrush != null && StrokeWidth > 0 && StrokeStyle != null)
-                context.DeviceContext.DrawGeometry(geometry, StrokeBrush, StrokeWidth /2, StrokeStyle);
+                context.DeviceContext.DrawGeometry(_geometry, StrokeBrush, StrokeWidth /2, StrokeStyle);
             if (FillBrush != null)
-                context.DeviceContext.FillGeometry(geometry, FillBrush);
+                context.DeviceContext.FillGeometry(_geometry, FillBrush);
         }
 
         private static double NormalizeAngle(double degree)
@@ -109,23 +121,23 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             return degree;
         }
 
-        internal Vector2 GetArcPoint(double degree, double radius)
+        private Vector2 GetArcPoint(double degree, double radius)
         {
             var arcPoint = CalArcPoint(degree);
-            return RelativeToAbsolutePoint(arcPoint);
+            return RelativeToAbsolutePoint(arcPoint, (float)radius);
         }
 
-        internal static Vector2 CalArcPoint(double degree)
+        private static Vector2 CalArcPoint(double degree)
         {
             degree = NormalizeAngle(degree);
             var num = degree * Math.PI / 180.0;
             return new Vector2((float) (0.5 + 0.5 * Math.Sin(num)), (float) (0.5 - 0.5 * Math.Cos(num)));
         }
 
-        internal Vector2 RelativeToAbsolutePoint(Vector2 relative)
+        private Vector2 RelativeToAbsolutePoint(Vector2 relative, float radius)
         {
-            return new Vector2(LayoutBound.X + StrokeWidth + relative.X * _length,
-                LayoutBound.Y + StrokeWidth + relative.Y * _length);
+            return new Vector2(LayoutBound.X + StrokeWidth + relative.X * radius * 2,
+                LayoutBound.Y + StrokeWidth + relative.Y * radius * 2);
         }
     }
 }

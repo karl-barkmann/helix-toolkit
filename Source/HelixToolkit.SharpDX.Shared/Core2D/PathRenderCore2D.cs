@@ -103,6 +103,11 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             return base.OnAttach(host);
         }
 
+        protected override bool CanRender(RenderContext2D context)
+        {
+            return base.CanRender(context) && Figures != null && Figures.Count > 0;
+        }
+
         /// <summary>
         /// Called when [render].
         /// </summary>
