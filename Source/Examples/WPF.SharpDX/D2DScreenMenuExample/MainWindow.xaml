@@ -70,8 +70,9 @@
                         </hx2D:StackPanel2D>                        
                     </hx2D:StackPanel2D>
                    
-                    <hx2D:MultiSegmentModel2D EnableAnimation="True"
-                                              AnimationDuration="0:0:5"
+                    <hx2D:MultiSegmentModel2D 
+                                              AnimationDuration="0:0:15"
+                                                EnableAnimation="True"
                                               Width="300" Height="200"
                                               Stroke="Red" StrokeThickness="40"
                                               SegmentAngle="20" SegmentNum="10"/>

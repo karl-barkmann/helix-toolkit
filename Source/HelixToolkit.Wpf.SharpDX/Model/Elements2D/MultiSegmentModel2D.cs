@@ -134,14 +134,13 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
         {
             if (_storyboard == null || _storyboard.Children.Count < 1)
                 return;
+            if (_storyboard.Children[0] is DoubleAnimation animation)
+            {
+                animation.Duration = new Duration(AnimationDuration);
+                animation.BeginTime = AnimationInterval;
+            }
             if (EnableAnimation)
             {
-                var animation = _storyboard.Children[0] as DoubleAnimation;
-                if (animation != null)
-                {
-                    animation.Duration = new Duration(AnimationDuration);
-                    animation.BeginTime = AnimationInterval;
-                }
                 _storyboard.Stop();
                 _storyboard.Begin();
             }
