@@ -414,7 +414,6 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
                     * ModelMatrix * Matrix3x2.Translation(RenderSize * RenderTransformOrigin)
                     * LayoutTranslate;
 
-                //RelativeMatrix = ModelMatrix;
                 TotalModelMatrix = RelativeMatrix * ParentMatrix;
                 IsTransformDirty = false;
                 InvalidateVisual();
