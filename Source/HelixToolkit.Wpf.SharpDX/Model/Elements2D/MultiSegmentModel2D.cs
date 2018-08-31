@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using HelixToolkit.Wpf.SharpDX.Model.Scene2D;
@@ -38,7 +37,7 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
         public MultiSegmentModel2D()
         {
             Transform = new RotateTransform {Angle = 0d};
-            this.RenderTransformOrigin=new Point(0.5,0.5);
+            RenderTransformOrigin = new Point(0.5, 0.5);
             _storyboard = new Storyboard {RepeatBehavior = RepeatBehavior.Forever};
             Timeline.SetDesiredFrameRate(_storyboard, 30);
             var animation = CreateDoubleAnimation();
@@ -86,19 +85,6 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
         private DoubleAnimation CreateDoubleAnimation()
         {
             var animation = new DoubleAnimation {From = 0, To = 360};
-
-            var bindingInterval = new Binding("AnimationInterval")
-            {
-                Mode = BindingMode.OneWay,
-                Source = this
-            };
-            BindingOperations.SetBinding(animation, Timeline.BeginTimeProperty, bindingInterval);
-            var bindingDuration = new Binding("AnimationDuration")
-            {
-                Mode = BindingMode.OneWay,
-                Source = this
-            };
-            BindingOperations.SetBinding(animation, Timeline.DurationProperty, bindingDuration);
             return animation;
         }
 
@@ -150,6 +136,12 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
                 return;
             if (EnableAnimation)
             {
+                var animation = _storyboard.Children[0] as DoubleAnimation;
+                if (animation != null)
+                {
+                    animation.Duration = new Duration(AnimationDuration);
+                    animation.BeginTime = AnimationInterval;
+                }
                 _storyboard.Stop();
                 _storyboard.Begin();
             }
