@@ -38,24 +38,5 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             hitResult = null;
             return false;
         }
-
-
-        protected override Size2F MeasureOverride(Size2F availableSize)
-        {
-            return base.MeasureOverride(availableSize);
-            //textRenderable.MaxWidth = availableSize.Width;
-            //textRenderable.MaxHeight = availableSize.Height;
-            //var metrices = textRenderable.Metrices;
-            //return new Size2F(metrices.WidthIncludingTrailingWhitespace, metrices.Height);
-        }
-
-        protected override RectangleF ArrangeOverride(RectangleF finalSize)
-        {
-            return base.ArrangeOverride(finalSize);
-            //textRenderable.MaxWidth = finalSize.Width;
-            //textRenderable.MaxHeight = finalSize.Height;
-            //var metrices = textRenderable.Metrices;
-            //return finalSize;
-        }
     }
 }

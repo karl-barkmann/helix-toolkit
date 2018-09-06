@@ -1,6 +1,4 @@
-﻿using HelixToolkit.SharpDX.Extensions;
-using HelixToolkit.Wpf.SharpDX.Core2D;
-using HelixToolkit.Wpf.SharpDX.Extensions;
+﻿using HelixToolkit.Wpf.SharpDX.Extensions;
 using HelixToolkit.Wpf.SharpDX.Model.Scene2D;
 using System.Windows;
 using System.Windows.Media;
@@ -54,14 +52,13 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
 
         #endregion
 
-
         #region Data Properties
 
         /// <summary>
         /// Data property
         /// </summary>
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register(
-            "Data",
+            nameof(Data),
             typeof(Geometry),
             typeof(Path2D),
             new FrameworkPropertyMetadata(
@@ -77,26 +74,6 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
         {
             var pathNode2D = SceneNode as PathNode2D;
             pathNode2D.Geometry = newValue;
-            var pathRenderCore2D = pathNode2D.RenderCore as PathRenderCore2D;
-            if (newValue == null)
-            {
-                pathRenderCore2D.Figures.Clear();
-                return;
-            }
-
-            var pathGeometry = PathGeometry.CreateFromGeometry(newValue);
-            var d2dFigures = new System.Collections.Generic.List<Figure>();
-            foreach (var figure in pathGeometry.Figures)
-            {
-                var d2dFigure = new Figure(figure.StartPoint.ToVector2(), figure.IsFilled, figure.IsClosed);
-                foreach (var segment in figure.Segments)
-                {
-                    d2dFigure.AddSegment(segment.ToD2DSegment(), segment.IsStroked, segment.IsSmoothJoin);
-                }
-                d2dFigures.Add(d2dFigure);
-            }
-           
-            pathRenderCore2D.Figures = d2dFigures;
         }
 
         /// <summary>

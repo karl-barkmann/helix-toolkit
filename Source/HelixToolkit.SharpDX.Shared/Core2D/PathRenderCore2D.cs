@@ -135,6 +135,10 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
                 }
                 isGeometryChanged = false;
             }
+
+            if (geometry == null)
+                return;
+
             if (StrokeBrush != null && StrokeWidth > 0 && StrokeStyle != null)
             {
                 context.DeviceContext.DrawGeometry(geometry, StrokeBrush, StrokeWidth, StrokeStyle);

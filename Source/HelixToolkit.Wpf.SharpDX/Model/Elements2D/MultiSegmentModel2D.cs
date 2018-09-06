@@ -113,8 +113,7 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             if (!(d is MultiSegmentModel2D model2D))
                 return;
             var newValue = (bool) e.NewValue;
-            var animation = model2D._storyboard.Children[0] as DoubleAnimation;
-            if (animation == null)
+            if (!(model2D._storyboard.Children[0] is DoubleAnimation animation))
                 return;
             if (newValue)
             {

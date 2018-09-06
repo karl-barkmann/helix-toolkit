@@ -258,7 +258,7 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
 
         public static readonly DependencyProperty EnableBitmapCacheProperty =
             DependencyProperty.Register("EnableBitmapCache", typeof(bool), typeof(Element2D),
-                new PropertyMetadata(false, (d,e)=> { (d as Element2DCore).SceneNode.EnableBitmapCache = (bool)e.NewValue; }));
+                new PropertyMetadata(true, (d,e)=> { (d as Element2DCore).SceneNode.EnableBitmapCache = (bool)e.NewValue; }));
 
 
         #endregion
