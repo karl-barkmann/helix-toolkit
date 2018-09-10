@@ -38,9 +38,13 @@ namespace HelixToolkit.SharpDX.Extensions
                         bezierSegment.Point3.ToVector2());
                     return core2DBezierSegment;
                 case PolyLineSegment polyLineSegment:
-                    var points = polyLineSegment.Points.Select(x => x.ToVector2());
-                    CoreD2D.PolyLineSegment core2DPolylineSegment = new CoreD2D.PolyLineSegment(points);
-                    return core2DPolylineSegment;
+                    var linePoints = polyLineSegment.Points.Select(x => x.ToVector2());
+                    CoreD2D.PolyLineSegment core2DPolyLineSegment = new CoreD2D.PolyLineSegment(linePoints);
+                    return core2DPolyLineSegment;
+                case PolyBezierSegment polyBezierSegment:
+                    var bezierPoints = polyBezierSegment.Points.Select(x => x.ToVector2());
+                    CoreD2D.PolyBezierSegment core2DPolyBezierSegment = new CoreD2D.PolyBezierSegment(bezierPoints);
+                    return core2DPolyBezierSegment;
                 default:
                     throw new NotSupportedException();
             }

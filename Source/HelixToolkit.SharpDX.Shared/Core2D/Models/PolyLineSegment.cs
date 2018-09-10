@@ -1,9 +1,9 @@
 ﻿using HelixToolkit.Wpf.SharpDX.Core;
 using SharpDX;
-using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
 using System.Collections.Generic;
 using System.Linq;
+using D2D = SharpDX.Direct2D1;
 
 namespace HelixToolkit.Wpf.SharpDX.Core2D
 {
@@ -16,7 +16,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             _points = new Vector2Collection(points);
         }
 
-        public override void Create(GeometrySink sink)
+        public override void Create(D2D.GeometrySink sink)
         {
             sink.AddLines(_points.Select(x => (RawVector2)x).ToArray());
         }
