@@ -69,6 +69,25 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             }
         }
 
+        private int fontSize = 12;
+        public int FontSize
+        {
+            set
+            {
+                if (SetAffectsRender(ref fontSize, value) && IsAttached)
+                {
+                    UpdateFontFormat();
+                }
+            }
+            get { return fontSize; }
+        }
+
+        private void UpdateFontFormat()
+        {
+            RemoveAndDispose(ref format);
+            format = Collect(new TextFormat(factory, "Arial", FontSize));
+        }
+
         private TextLayout textLayout;
         private Factory factory;
         private TextFormat format;
@@ -82,7 +101,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
         protected override bool OnAttach(IRenderHost target)
         {
             factory = Collect(new Factory(FactoryType.Isolated));
-            format = Collect(new TextFormat(factory, "Arial", 12));
+            format = Collect(new TextFormat(factory, "Arial", FontSize));
             previousStr = "";
             this.statistics = target.RenderStatistics;
             return base.OnAttach(target);
@@ -114,7 +133,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             var metrices = textLayout.Metrics;
             renderBound.Width = Math.Max(metrices.Width, renderBound.Width);
             renderBound.Height = metrices.Height;
-            context.DeviceContext.Transform = Matrix3x2.Translation((float)context.ActualWidth - renderBound.Width, 0);                                     
+            context.DeviceContext.Transform = Matrix3x2.Translation((float)context.ActualWidth - renderBound.Width, 0);
             context.DeviceContext.FillRectangle(renderBound, background);
             context.DeviceContext.DrawTextLayout(Vector2.Zero, textLayout, foreground);
         }

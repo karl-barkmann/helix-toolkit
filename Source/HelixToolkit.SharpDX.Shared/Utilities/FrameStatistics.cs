@@ -239,12 +239,12 @@ namespace HelixToolkit.UWP.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string GetFPS()
         {
-            return $"FPS:{Math.Round(FPSStatistics.AverageFrequency, 2)}" + LineBreak;
+            return $"FPS:{Math.Round(FPSStatistics.AverageFrequency, 2)}";
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string GetStatistics()
         {
-            return $"Render(ms): {Math.Round(LatencyStatistics.AverageValue, 4)}\n" +
+            return LineBreak + $"Render(ms): {Math.Round(LatencyStatistics.AverageValue, 4)}\n" +
                 $"NumModel3D: {NumModel3D}\n" +
                 $"NumCore3D: {NumCore3D}\n" +
                 $"NumDrawCalls: {NumDrawCalls}"
@@ -253,12 +253,12 @@ namespace HelixToolkit.UWP.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string GetTriangleCount()
         {
-            return $"NumTriangle: {NumTriangles}" + LineBreak;
+            return LineBreak + $"NumTriangle: {NumTriangles}";
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string GetCamera()
         {
-            return Camera == null ? "" : "Camera:\n" + Camera.ToString() + LineBreak;
+            return LineBreak + Camera == null ? "" : "Camera:\n" + Camera.ToString();
         }
         /// <summary>
         /// Resets this instance.

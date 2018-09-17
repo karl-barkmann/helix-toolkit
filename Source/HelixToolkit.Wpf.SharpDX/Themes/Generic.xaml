@@ -47,6 +47,7 @@
                                 SizeScale="{TemplateBinding CoordinateSystemSize}" />
                             <hx2D:FrameStatisticsModel2D
                                 x:Name="PART_FrameStatisticView"
+                                FontSize="{TemplateBinding FontSize}"
                                 Background="{TemplateBinding InfoBackground}"
                                 Foreground="{TemplateBinding InfoForeground}" />
                             <hx2D:StackPanel2D

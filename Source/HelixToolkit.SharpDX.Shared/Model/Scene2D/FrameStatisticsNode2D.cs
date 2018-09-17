@@ -41,6 +41,18 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             }
         }
 
+        public int FontSize
+        {
+            set
+            {
+                (RenderCore as FrameStatisticsRenderCore).FontSize = value;
+            }
+            get
+            {
+                return (RenderCore as FrameStatisticsRenderCore).FontSize;
+            }
+        }
+
         public FrameStatisticsNode2D()
         {
             HorizontalAlignment = HorizontalAlignment.Right;

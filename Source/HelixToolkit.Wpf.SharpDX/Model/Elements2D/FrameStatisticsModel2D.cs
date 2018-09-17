@@ -4,7 +4,9 @@ using System.Windows.Media;
 namespace HelixToolkit.Wpf.SharpDX.Elements2D
 {
     using Extensions;
+    using HelixToolkit.Wpf.SharpDX.Core2D;
     using Model.Scene2D;
+    using System;
 
     public class FrameStatisticsModel2D : Element2D
     {
@@ -45,6 +47,28 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
             get
             {
                 return (Brush)GetValue(BackgroundProperty);
+            }
+        }
+
+
+        public static readonly DependencyProperty FontSizeProperty
+            = DependencyProperty.Register("FontSize", typeof(double), typeof(FrameStatisticsModel2D),
+                new PropertyMetadata(12d, (d, e) =>
+                {
+                    var newValue = (double)e.NewValue;
+                    var value = (int)Math.Round(newValue);
+                    ((d as Element2DCore).SceneNode as FrameStatisticsNode2D).FontSize = Math.Max(1, value);
+                }));
+
+        public double FontSize
+        {
+            set
+            {
+                SetValue(FontSizeProperty, value);
+            }
+            get
+            {
+                return (double)GetValue(FontSizeProperty);
             }
         }
 
