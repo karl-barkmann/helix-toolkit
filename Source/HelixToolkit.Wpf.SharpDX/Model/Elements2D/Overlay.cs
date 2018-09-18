@@ -1,8 +1,7 @@
-﻿
+﻿using HelixToolkit.Wpf.SharpDX.Model.Scene2D;
 
 namespace HelixToolkit.Wpf.SharpDX.Elements2D
 {
-    using Model.Scene2D;
     internal sealed class Overlay : Panel2D
     {
         protected override SceneNode2D OnCreateSceneNode()

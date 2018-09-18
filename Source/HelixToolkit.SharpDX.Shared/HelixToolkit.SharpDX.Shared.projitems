@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\Abstract\RenderCore2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\Abstract\RenderCore2DBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\Abstract\ShapeRenderCore2DBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core2D\ArcRenderCore2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\BorderRenderCore2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\EllipseRenderCore2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core2D\EmptyRenderCore2D.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Lights\Light3DSceneShared.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Lights\LightsBufferModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\OrderKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\ArcNode2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\DoubleUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\MultiSegmentNode2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Scene2D\PathNode2D.cs" />

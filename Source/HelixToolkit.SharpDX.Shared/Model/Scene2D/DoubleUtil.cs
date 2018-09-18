@@ -10,10 +10,6 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
     static class DoubleUtil
     {
         internal const double DBL_EPSILON = 2.2204460492503131e-016; /* smallest such that 1.0+DBL_EPSILON != 1.0 */
-        public static bool IsZero(double value)
-        {
-            return Math.Abs(value) < 10.0 * DBL_EPSILON;
-        }
 
         [StructLayout(LayoutKind.Explicit)]
         private struct NanUnion
@@ -36,6 +32,21 @@ namespace HelixToolkit.Wpf.SharpDX.Model.Scene2D
             UInt64 man = t.UintValue & 0x000fffffffffffff;
 
             return (exp == 0x7ff0000000000000 || exp == 0xfff0000000000000) && (man != 0);
+        }
+
+        public static bool IsZero(double value)
+        {
+            return Math.Abs(value) < 10.0 * DBL_EPSILON;
+        }
+
+        public static bool IsVerySmall(double value)
+        {
+            return Math.Abs(value) < 1E-06;
+        }
+
+        public static bool AreClose(double value1, double value2)
+        {
+            return value1 == value2 || IsVerySmall(value1 - value2);
         }
     }
 }

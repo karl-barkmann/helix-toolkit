@@ -149,6 +149,7 @@
     <Compile Include="Extensions\TypeConvertExtensions.cs" />
     <Compile Include="Model\Elements2D\Abstract\Clickable2D.cs" />
     <Compile Include="Model\Elements2D\Abstract\ContentElement2D.cs" />
+    <Compile Include="Model\Elements2D\Arc2D.cs" />
     <Compile Include="Model\Elements2D\FrameStatisticsModel2D.cs" />
     <Compile Include="Model\Elements2D\ImageModel2D.cs" />
     <Compile Include="Model\Elements2D\ItemsModel2D.cs" />
