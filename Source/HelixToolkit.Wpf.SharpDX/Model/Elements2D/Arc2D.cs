@@ -82,6 +82,16 @@ namespace HelixToolkit.Wpf.SharpDX.Elements2D
 
         #endregion
 
+        protected override void OnUpdate(RenderContext2D context)
+        {
+            base.OnUpdate(context);
+            if (SceneNode is ArcNode2D arcNode)
+            {
+                arcNode.Fill = Fill;
+                arcNode.Stroke = Stroke;
+            }
+        }
+
         protected override SceneNode2D OnCreateSceneNode()
         {
             return new ArcNode2D();

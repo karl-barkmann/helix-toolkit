@@ -338,7 +338,7 @@ namespace HelixToolkit.Wpf.SharpDX.Render
             asyncTask = Task.Factory.StartNew(() =>
             {
                 renderer?.UpdateNotRenderParallel(RenderContext, perFrameFlattenedScene);
-            });
+            }, System.Threading.CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             if ((ShowRenderDetail & RenderDetail.TriangleInfo) == RenderDetail.TriangleInfo)
             {
                 getTriangleCountTask = Task.Factory.StartNew(() =>
@@ -361,7 +361,7 @@ namespace HelixToolkit.Wpf.SharpDX.Render
                         }
                     }
                     renderStatistics.NumTriangles = count;
-                });
+                }, System.Threading.CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
         }
 

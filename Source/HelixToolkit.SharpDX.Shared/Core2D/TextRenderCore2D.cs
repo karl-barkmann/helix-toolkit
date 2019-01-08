@@ -237,8 +237,8 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
                 textLayout = Collect(new TextLayout(textFactory, Text, textFormat, MaxWidth, MaxHeight));
                 textLayoutDirty = false;
             }
-            textLayout.SetTextAlignment(TextAlignment);
-            textLayout.SetWordWrapping(TextWrapping);
+            textLayout.TextAlignment = TextAlignment;
+            textLayout.WordWrapping = TextWrapping;
         }       
 
         protected override bool CanRender(RenderContext2D context)

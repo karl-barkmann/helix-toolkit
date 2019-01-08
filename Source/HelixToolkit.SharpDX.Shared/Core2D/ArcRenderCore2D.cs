@@ -1,7 +1,10 @@
 ﻿using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Core2D;
+using HelixToolkit.Wpf.SharpDX.Extensions;
 using HelixToolkit.Wpf.SharpDX.Model.Scene2D;
 using SharpDX;
+using SharpDX.Direct2D1;
+using SharpDX.Direct3D11;
 using System;
 using D2D = SharpDX.Direct2D1;
 
@@ -17,6 +20,8 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
         private float _endAngle;
         private bool _isGeometryChanged;
         private D2D.PathGeometry1 _geometry;
+        private D2D.Brush _stroke;
+        private D2D.Brush _fill;
 
         public float StartAngle
         {
@@ -42,6 +47,18 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             }
         }
 
+        public System.Windows.Media.Brush Stroke
+        {
+            get;
+            set;
+        }
+
+        public System.Windows.Media.Brush Fill
+        {
+            get;
+            set;
+        }
+
         protected override bool OnAttach(IRenderHost host)
         {
             _isGeometryChanged = true;
@@ -63,7 +80,10 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
             if(_isGeometryChanged)
             {
                 RemoveAndDispose(ref _geometry);
+                RemoveAndDispose(ref _stroke);
+                RemoveAndDispose(ref _fill);
 
+                Vector2 geometrySize = new Vector2();
                 if (DoubleUtil.IsVerySmall((NormalizeAngle(EndAngle) - NormalizeAngle(StartAngle)) % 360))
                 {
                     var logicalBounds = ComputeLogicalBounds(LayoutBound);
@@ -82,10 +102,11 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
                     }
 
                     var leftArcSegment = new ArcSegment(array[1], size, 0, D2D.SweepDirection.Clockwise, D2D.ArcSize.Small);
-                    var rightArcSegment = new ArcSegment(array[0],size,0, D2D.SweepDirection.Clockwise, D2D.ArcSize.Small);
+                    var rightArcSegment = new ArcSegment(array[0], size, 0, D2D.SweepDirection.Clockwise, D2D.ArcSize.Small);
                     var figure = new Figure(array[0], false, true);
                     figure.AddSegment(leftArcSegment);
                     figure.AddSegment(rightArcSegment);
+                    geometrySize = new Vector2(LayoutBound.Width, LayoutBound.Height);
                     _geometry = Collect(new D2D.PathGeometry1(context.DeviceResources.Factory2D));
                     using (var sink = _geometry.Open())
                     {
@@ -105,6 +126,7 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
                     var arcSegment = new ArcSegment(endPoint, size2F, 0, D2D.SweepDirection.Clockwise, arcSize);
                     var figure = new Figure(startPoint, false, false);
                     figure.AddSegment(arcSegment);
+                    geometrySize = new Vector2(endPoint.X - startPoint.X, endPoint.Y - startPoint.Y);
                     _geometry = Collect(new D2D.PathGeometry1(context.DeviceResources.Factory2D));
                     using (var sink = _geometry.Open())
                     {
@@ -112,13 +134,16 @@ namespace HelixToolkit.Wpf.SharpDX.Core2D
                         sink.Close();
                     }
                 }
+
+                _stroke = Collect(Stroke.ToD2DBrush(geometrySize, context.DeviceContext));
+                _fill = Collect(Fill.ToD2DBrush(geometrySize, context.DeviceContext));
                 _isGeometryChanged = false;
             }
 
             if (StrokeBrush != null && StrokeWidth > 0 && StrokeStyle != null)
-                context.DeviceContext.DrawGeometry(_geometry, StrokeBrush, StrokeWidth, StrokeStyle);
+                context.DeviceContext.DrawGeometry(_geometry, _stroke, StrokeWidth, StrokeStyle);
             if (FillBrush != null)
-                context.DeviceContext.FillGeometry(_geometry, FillBrush);
+                context.DeviceContext.FillGeometry(_geometry, _fill);
         }
 
         private Vector2 GetArcPoint(double degree, double radius)
